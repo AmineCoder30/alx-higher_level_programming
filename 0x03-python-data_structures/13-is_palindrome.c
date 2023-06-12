@@ -1,52 +1,52 @@
 #include "lists.h"
 
 /**
- * reverse - reverses the second half of the list
+ * list_reverse - function to reverse the second half of list
  *
- * @h_r: head of the second half
+ * @headr: head of list
  * Return: no return
  */
-void reverse(listint_t **h_r)
+void list_reverse(listint_t **headr)
 {
-	listint_t *prv;
-	listint_t *crr;
-	listint_t *nxt;
+	listint_t *previous;
+	listint_t *current;
+	listint_t *next;
 
-	prv = NULL;
-	crr = *h_r;
+	previous = NULL;
+	current = *headr;
 
-	while (crr != NULL)
+	while (current != NULL)
 	{
-		nxt = crr->next;
-		crr->next = prv;
-		prv = crr;
-		crr = nxt;
+		next = current->next;
+		current->next = previous;
+		previous = current;
+		current = next;
 	}
 
-	*h_r = prv;
+	*headr = previous;
 }
 
 /**
- * compare - compares each int of the list
+ * list_compare - function to compare between int of list
  *
- * @h1: head of the first half
- * @h2: head of the second half
+ * @head1: first head of list
+ * @head2: second head of list
  * Return: 1 if are equals, 0 if not
  */
-int compare(listint_t *h1, listint_t *h2)
+int list_compare(listint_t *head1, listint_t *head2)
 {
-	listint_t *tmp1;
-	listint_t *tmp2;
+	listint_t *tp1;
+	listint_t *tp2;
 
-	tmp1 = h1;
-	tmp2 = h2;
+	tp1 = head1;
+	tp2 = head2;
 
-	while (tmp1 != NULL && tmp2 != NULL)
+	while (tp1 != NULL && tp2 != NULL)
 	{
-		if (tmp1->n == tmp2->n)
+		if (tp1->n == tp2->n)
 		{
-			tmp1 = tmp1->next;
-			tmp2 = tmp2->next;
+			tp1 = tp1->next;
+			tp2 = tp2->next;
 		}
 		else
 		{
@@ -54,7 +54,7 @@ int compare(listint_t *h1, listint_t *h2)
 		}
 	}
 
-	if (tmp1 == NULL && tmp2 == NULL)
+	if (tp1 == NULL && tp2 == NULL)
 	{
 		return (1);
 	}
@@ -71,44 +71,44 @@ int compare(listint_t *h1, listint_t *h2)
  */
 int is_palindrome(listint_t **head)
 {
-	listint_t *slow, *fast, *prev_slow;
-	listint_t *scn_half, *middle;
-	int isp;
+	listint_t *slw, *fast, *previous_slw;
+	listint_t *scan_hlf, *mdl;
+	int is_plin;
 
-	slow = fast = prev_slow = *head;
-	middle = NULL;
-	isp = 1;
+	slw = fast = previous_slw = *head;
+	mdl = NULL;
+	is_plin = 1;
 
 	if (*head != NULL && (*head)->next != NULL)
 	{
 		while (fast != NULL && fast->next != NULL)
 		{
 			fast = fast->next->next;
-			prev_slow = slow;
-			slow = slow->next;
+			previous_slw = slw;
+			slw = slw->next;
 		}
 
 		if (fast != NULL)
 		{
-			middle = slow;
-			slow = slow->next;
+			mdl = slw;
+			slw = slw->next;
 		}
 
-		scn_half = slow;
-		prev_slow->next = NULL;
-		reverse(&scn_half);
-		isp = compare(*head, scn_half);
+		scan_hlf = slw;
+		previous_slw->next = NULL;
+		list_reverse(&scan_hlf);
+		is_plin = list_compare(*head, scan_hlf);
 
-		if (middle != NULL)
+		if (mdl != NULL)
 		{
-			prev_slow->next = middle;
-			middle->next = scn_half;
+			previous_slw->next = mdl;
+			mdl->next = scan_hlf;
 		}
 		else
 		{
-			prev_slow->next = scn_half;
+			previous_slw->next = scan_hlf;
 		}
 	}
 
-	return (isp);
+	return (is_plin);
 }
