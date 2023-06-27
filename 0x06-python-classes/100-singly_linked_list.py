@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+# 0-square.py by amine mohamed
+"""Defines a square"""
+
+
 class Node:
     def __init__(self, data, next_node=None):
         self.data = data

@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# 0-square.py by amine mohamed
+"""Defines a square"""
 import math
 
 
