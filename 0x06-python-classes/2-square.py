@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+# 0-square.py by amine mohamed
+"""Defines a square"""
+
+
 class Square:
     """ A class that defines a square by its size
     """
