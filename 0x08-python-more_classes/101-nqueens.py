@@ -1,94 +1,117 @@
 #!/usr/bin/python3
-"""Solves the N-qn puzzle"""
+"""Solves the N-queens puzzle"""
 
 import sys
 
 
-def bd_initialisatio(n):
-    """Initialize."""
-    bd = []
-    [bd.append([]) for i in range(n)]
-    [wr.append(' ') for i in range(n) for wr in bd]
-    return (bd)
+def init_board(n):
+    """Initialize an `n`x`n` sized chessboard with 0's."""
+    board = []
+    [board.append([]) for i in range(n)]
+    [row.append(' ') for i in range(n) for row in board]
+    return (board)
 
 
-def bd_dcp(bd):
-    """Return a bd_dcp."""
-    if isinstance(bd, list):
-        return list(map(bd_dcp, bd))
-    return (bd)
+def board_deepcopy(board):
+    """Return a deepcopy of a chessboard."""
+    if isinstance(board, list):
+        return list(map(board_deepcopy, board))
+    return (board)
 
 
-def stl_get(bd):
-    """Return the list."""
-    slt = []
-    for r in range(len(bd)):
-        for c in range(len(bd)):
-            if bd[r][c] == "Q":
-                slt.append([r, c])
+def get_solution(board):
+    """Return the list of lists representation of a solved chessboard."""
+    solution = []
+    for r in range(len(board)):
+        for c in range(len(board)):
+            if board[r][c] == "Q":
+                solution.append([r, c])
                 break
-    return (slt)
+    return (solution)
 
 
-def xout(bd, wr, col):
-    """something here."""
+def xout(board, row, col):
+    """X out spots on a chessboard.
 
-    for c in range(col + 1, len(bd)):
-        bd[wr][c] = "x"
+    All spots where non-attacking queens can no
+    longer be played are X-ed out.
 
+    Args:
+        board (list): The current working chessboard.
+        row (int): The row where a queen was last played.
+        col (int): The column where a queen was last played.
+    """
+    # X out all forward spots
+    for c in range(col + 1, len(board)):
+        board[row][c] = "x"
+    # X out all backwards spots
     for c in range(col - 1, -1, -1):
-        bd[wr][c] = "x"
-
-    for r in range(wr + 1, len(bd)):
-        bd[r][col] = "x"
-
-    for r in range(wr - 1, -1, -1):
-        bd[r][col] = "x"
+        board[row][c] = "x"
+    # X out all spots below
+    for r in range(row + 1, len(board)):
+        board[r][col] = "x"
+    # X out all spots above
+    for r in range(row - 1, -1, -1):
+        board[r][col] = "x"
+    # X out all spots diagonally down to the right
     c = col + 1
-    for r in range(wr + 1, len(bd)):
-        if c >= len(bd):
+    for r in range(row + 1, len(board)):
+        if c >= len(board):
             break
-        bd[r][c] = "x"
+        board[r][c] = "x"
         c += 1
+    # X out all spots diagonally up to the left
     c = col - 1
-    for r in range(wr - 1, -1, -1):
+    for r in range(row - 1, -1, -1):
         if c < 0:
             break
-        bd[r][c]
+        board[r][c]
         c -= 1
+    # X out all spots diagonally up to the right
     c = col + 1
-    for r in range(wr - 1, -1, -1):
-        if c >= len(bd):
+    for r in range(row - 1, -1, -1):
+        if c >= len(board):
             break
-        bd[r][c] = "x"
+        board[r][c] = "x"
         c += 1
+    # X out all spots diagonally down to the left
     c = col - 1
-    for r in range(wr + 1, len(bd)):
+    for r in range(row + 1, len(board)):
         if c < 0:
             break
-        bd[r][c] = "x"
+        board[r][c] = "x"
         c -= 1
 
 
-def rc_slt(bd, wr, qn, slt):
-    """rc puzzle."""
-    if qn == len(bd):
-        slt.append(stl_get(bd))
-        return (slt)
+def recursive_solve(board, row, queens, solutions):
+    """Recursively solve an N-queens puzzle.
 
-    for c in range(len(bd)):
-        if bd[wr][c] == " ":
-            tmp_bd = bd_dcp(bd)
-            tmp_bd[wr][c] = "Q"
-            xout(tmp_bd, wr, c)
-            slt = rc_slt(tmp_bd, wr + 1, qn + 1, slt)
+    Args:
+        board (list): The current working chessboard.
+        row (int): The current working row.
+        queens (int): The current number of placed queens.
+        solutions (list): A list of lists of solutions.
+    Returns:
+        solutions
+    """
+    if queens == len(board):
+        solutions.append(get_solution(board))
+        return (solutions)
 
-    return (slt)
+    for c in range(len(board)):
+        if board[row][c] == " ":
+            tmp_board = board_deepcopy(board)
+            tmp_board[row][c] = "Q"
+            xout(tmp_board, row, c)
+            solutions = recursive_solve(tmp_board, row + 1,
+                                        queens + 1, solutions)
+
+    return (solutions)
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: nqn N")
+        print("Usage: nqueens N")
         sys.exit(1)
     if sys.argv[1].isdigit() is False:
         print("N must be a number")
@@ -97,7 +120,7 @@ if __name__ == "__main__":
         print("N must be at least 4")
         sys.exit(1)
 
-    bd = bd_initialisatio(int(sys.argv[1]))
-    slt = rc_slt(bd, 0, 0, [])
-    for sol in slt:
+    board = init_board(int(sys.argv[1]))
+    solutions = recursive_solve(board, 0, 0, [])
+    for sol in solutions:
         print(sol)
