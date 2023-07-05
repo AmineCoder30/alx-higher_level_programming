@@ -1,2 +1,2 @@
 0x07-python-test_driven_developmen
-ls
+ls cd ....
