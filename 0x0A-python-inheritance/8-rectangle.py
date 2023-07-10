@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+    This module returns the list of available attributes
+    and methods of an object
+"""
 BaseGeometry = __import__('7-base_geometry').BaseGeometry
 
 

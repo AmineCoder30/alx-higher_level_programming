@@ -1,4 +1,10 @@
 #!/usr/bin/python3
+"""
+    This module returns the list of available attributes
+    and methods of an object
+"""
+
+
 class MyList(list):
     """ Class that inherits the attributes references of class list
 

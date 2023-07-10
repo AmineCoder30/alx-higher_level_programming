@@ -1,4 +1,10 @@
 #!/usr/bin/python3
+"""
+    This module returns the list of available attributes
+    and methods of an object
+"""
+
+
 def add_attribute(obj, name, value):
     """ Function that adds a new attribute to an object
 
